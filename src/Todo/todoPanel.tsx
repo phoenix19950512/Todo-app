@@ -19,11 +19,15 @@ const TodoPanel: React.FC = () => {
     if (!taskName || !taskDueDate) {
       return;
     }
+    const date = new Date();
+    const timezoneOffset = date.getTimezoneOffset();
+    const taskDueDateObj = new Date(taskDueDate);
+    taskDueDateObj.setMinutes(taskDueDateObj.getMinutes() + timezoneOffset);
     const newTask: Task = {
       id: tasks.length + 1,
       name: taskName,
       description: taskDescription,
-      dueDate: new Date(taskDueDate),
+      dueDate: taskDueDateObj,
       status: 'outstanding',
     };
     setTasks([...tasks, newTask]);
