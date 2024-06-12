@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { format, isBefore } from 'date-fns';
+import { format, isBefore, isToday } from 'date-fns';
 import { Task } from "./todoPanel";
 
 interface TaskListProps {
@@ -15,7 +15,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, setTasks }) => {
   useEffect(() => {
     let updated = false;
     const updatedTasks = tasks.map(task => {
-      if (task.status !== 'complete' && isBefore(task.dueDate, new Date())) {
+      if (task.status !== 'complete' && isBefore(task.dueDate, new Date()) && !isToday(task.dueDate)) {
         if (task.status !== 'overdue') updated = true;
         return { ...task, status: 'overdue' };
       }
@@ -60,12 +60,21 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, setTasks }) => {
             </div>
             {tasks.filter(task => task.status === status).map(task => (
               <div key={task.id} className="flex justify-between mb-2 p-2">
-                <input
-                  type="checkbox"
-                  className="h-fit mr-2 mt-2 cursor-pointer"
-                  checked={task.status === 'complete'}
-                  onChange={() => updateTaskStatus(task.id, task.status === 'complete' ? 'outstanding' : 'complete')}
-                />
+                <label className="flex w-fit h-fit mr-2 items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="h-fit mr-2 mt-2 cursor-pointer hidden"
+                    checked={task.status === 'complete'}
+                    onChange={() => updateTaskStatus(task.id, task.status === 'complete' ? 'outstanding' : 'complete')}
+                  />
+                  {task.status === 'complete' && <svg width="20" height="22" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0.5" y="2.5" width="19" height="19" rx="5.5" fill="#F9F5FF"/>
+                    <rect x="0.5" y="2.5" width="19" height="19" rx="5.5" stroke="#7F56D9"/>
+                    <path d="M14.6667 8.5L8.25001 14.9167L5.33334 12" stroke="#7F56D9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>}
+                  {task.status !== 'complete' && <span className="relative inline-block w-5 h-5 bg-[#f0f0f0] rounded border border-solid border-[#ccc] transition-['background-color','border-color']" />}
+                </label>
+                
                 <div className="flex items-center w-full">
                   <div className="flex flex-col w-full">
                     <div className="flex font-semibold">{task.name}</div>
