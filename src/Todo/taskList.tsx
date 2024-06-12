@@ -48,19 +48,19 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, setTasks }) => {
               {status}
               <span className="text-xl text-gray-500 ml-2">
                 {
-                  status == 'overdue' ? overdueCount
-                  : ( status == 'outstanding' ? outstandingCount : completeCount )
+                  status === 'overdue' ? overdueCount
+                  : ( status === 'outstanding' ? outstandingCount : completeCount )
                 }
               </span>
             </h2>
             <div className="flex ml-3 text-gray-500 select-none">
-              { (status == 'overdue' && !overdueCount) ? 'No task is overdue.' : '' }
-              { (status == 'outstanding' && !outstandingCount) ? 'No task is outstanding.' : '' }
-              { (status == 'complete' && !completeCount) ? 'No task is completed.' : '' }
+              { (status === 'overdue' && !overdueCount) ? 'No task is overdue.' : '' }
+              { (status === 'outstanding' && !outstandingCount) ? 'No task is outstanding.' : '' }
+              { (status === 'complete' && !completeCount) ? 'No task is completed.' : '' }
             </div>
             {tasks.filter(task => task.status === status).map(task => (
               <div key={task.id} className="flex justify-between mb-2 p-2">
-                <label className="flex w-fit h-fit mr-2 items-center cursor-pointer">
+                <label className="flex w-fit h-fit mr-2 mt-1 items-center cursor-pointer">
                   <input
                     type="checkbox"
                     className="h-fit mr-2 mt-2 cursor-pointer hidden"
@@ -81,7 +81,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, setTasks }) => {
                     <div className="flex text-gray-500">{task.description}</div>
                   </div>
                   <div
-                    className={`${status == 'overdue' ? 'text-red-500' : 'text-gray-500'} text-nowrap`}
+                    className={`${status === 'overdue' ? 'text-red-500' : 'text-gray-500'} text-nowrap`}
                   >
                     {format(task.dueDate, 'MMM d, yyyy')}
                   </div>
